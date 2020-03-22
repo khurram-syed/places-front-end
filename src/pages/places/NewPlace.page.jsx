@@ -1,38 +1,18 @@
-import React, { useReducer, useCallback } from 'react'
+import React from 'react'
 import Input from '../../components/shared/FormElements/Input';
 import Button from '../../components/shared/FormElements/Button';
 
 import {VALIDATOR_REQUIRE,VALIDATOR_MINLENGTH} from '../../utils/validators'
-
+import {useForm} from '../../components/shared/hooks/form-hook'
 import './PlaceForm.scss'
 
-const formReducer = (state,action)=>{
-  switch(action.type){
-  
-   case 'INPUT_CHANGE':
-      let formIsValid=true;
-      for(const inputId in state.inputs){
-         if(inputId===action.inputId){
-            formIsValid = formIsValid && action.isValid
-         }else{
-            formIsValid = formIsValid && state.inputs[inputId].isValid;
-         }
-      }   
-   return { ...state,
-       inputs:{...state.inputs,
-          [action.inputId]:{value:action.value, isValid:action.isValid }  
-       },
-       isValid: formIsValid              
-      }
-   default :
-       return state;
- }
-} 
+
 
 const NewPlace = ()=>{
-   const [formState,dispatch] = useReducer(formReducer,{
-      inputs:{
-         title:{
+
+   const [formState,inputHandler] = useForm(
+     {  
+        title:{
            value:'',
            isValid:false
         },
@@ -44,21 +24,10 @@ const NewPlace = ()=>{
          value: '',
          isValid: false
        }
-     },
-      isValid:false
-   })
-
-   /* This will use the callback to get the useEffect changes in input and assign the 
-      back here from  
-   */
-   const inputHandler=useCallback((id,value,isValid)=>{
-      dispatch({
-         type:'INPUT_CHANGE',
-         value: value,
-         isValid:isValid,
-         inputId: id
-      })
-   },[])
+    }
+   ,
+     false
+   )
   
    const formSubmitHandler=(e)=>{
       e.preventDefault();
