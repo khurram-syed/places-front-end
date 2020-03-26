@@ -1,0 +1,15 @@
+.authentication{
+    display:flex;
+    flex-direction: column;
+    margin: 7% 30% ;
+    border-radius : 3px;
+    align-items: center;
+}
+.authentication form{
+    margin-bottom : 20px; 
+    border: 1px solid orange;
+}
+.switchButton{
+   display: flex;
+   justify-content: center;
+}
