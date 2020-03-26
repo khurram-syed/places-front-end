@@ -21,8 +21,8 @@ const inputReducer = (state, action)=>{
 }
 const Input = props =>{
   const [inputState,dispatch] = useReducer(inputReducer,{
-            value:props.value || '',
-            isValid: props.valid || false,
+            value:props.initialValue || '',
+            isValid: props.intialValid || false,
             isTouched: false
   }) 
   //const {id,element,type,label,validators,errorText,onInput}=props;
@@ -65,11 +65,13 @@ const Input = props =>{
                     value={inputState.value}
                   /> )
 
-   return(<div className={`form-control {!inputState.isValid && inputStateisTouched && 
-                         'form-control--invalid'}`}>
-       <label htmlFor={props.id}>{props.label}</label>
-       {elementToRender}
-       {!inputState.isValid && inputState.isTouched && (<p>{props.errorText}</p>)} 
-   </div>) 
+   return( <div
+    className={`form-control ${!inputState.isValid && inputState.isTouched &&
+      'form-control--invalid'}`}
+  >
+    <label htmlFor={props.id}>{props.label}</label>
+    {elementToRender}
+    {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
+  </div>) 
 }
 export default Input

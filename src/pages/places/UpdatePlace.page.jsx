@@ -6,6 +6,9 @@ import {VALIDATOR_REQUIRE,VALIDATOR_MINLENGTH} from '../../utils/validators'
 import {useForm} from '../../components/shared/hooks/form-hook'
 import './PlaceForm.scss'
 import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import Card from '../../components/shared/UIElements/Card';
 
 const PLACES = [{id: 'p1', title: 'London', description: 'BigBen London Westminister',
 imageUrl : 'https://res.cloudinary.com/dv4nqc4ci/image/upload/v1584546056/places/Bigban_oxcdl5.jpg', 
@@ -22,32 +25,58 @@ address: 'Westminster, London SW1A 0AA'
 
 const UpdatePlace = () => {
     const placeId = useParams().placeId;
-   
-    const identifiedPlace = PLACES.find(p => p.id === placeId);
-    const [formState,inputHandler] = useForm(
+    const [isLoading, setIsLoading] = useState(true)
+    const [formState,inputHandler,setFormData] = useForm(
         {  
            title:{
-              value:identifiedPlace.title,
-              isValid:true
+              value:'',
+              isValid:false
            },
            description:{
-            value:identifiedPlace.description,
-            isValid:true
+            value:'',
+            isValid:false
           }
        },
-        true
+        false
       )
-     
+    const identifiedPlace = PLACES.find(p => p.id === placeId);
+    useEffect(()=>{
+       if(identifiedPlace) 
+        setFormData( {  
+            title:{
+               value:identifiedPlace.title,
+               isValid:true
+            },
+            description:{
+             value:identifiedPlace.description,
+             isValid:true
+           }
+        },true)  
+         setIsLoading(false) 
+    },[setFormData,identifiedPlace])
+   
+   
     if (!identifiedPlace) {
       return (
         <div className="center">
+        <Card >
           <h2>Could not find place!</h2>
+          </Card>  
         </div>
       );
     }
+
+    
     const formSubmitHandler =(e)=>{
         e.preventDefault();
         console.log('UpdatePlace - formState :',formState)
+    }
+    if(isLoading){
+        return <div className="center">
+            <Card>
+               Loading..
+            </Card>
+        </div>
     }
     return (
       <form className="place-form" onSubmit={formSubmitHandler}>
@@ -59,8 +88,8 @@ const UpdatePlace = () => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText="Please enter a valid title."
           onInput={inputHandler}
-          value={identifiedPlace.title}
-          valid={true}
+          initialValue={identifiedPlace.title}
+          intialValid={formState.inputs.title.isValid || true}
         />
         <Input
           id="description"
@@ -69,8 +98,8 @@ const UpdatePlace = () => {
           validators={[VALIDATOR_MINLENGTH(5)]}
           errorText="Please enter a valid description (min. 5 characters)."
           onInput={inputHandler}
-          value={identifiedPlace.description}
-          valid={true}
+          initialValue={identifiedPlace.description}
+          valid={formState.inputs.description.isValid || true}
         />
         <Button type="submit" disabled={!formState.isValid}>
           UPDATE PLACE

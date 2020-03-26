@@ -39,22 +39,30 @@ const NewPlace = ()=>{
                onInput={inputHandler}   //<<== point to be noted.
                validators={[VALIDATOR_REQUIRE()]} 
                placeholder={`please enter title here..`}
-               label='Title' />
+               label='Title' 
+               errorText="Please enter a valid title."
+               />
      
        <Input id="description" 
               element="textarea"
               onInput={inputHandler} //<<== point to be noted.
               validators={[VALIDATOR_MINLENGTH(5)]} 
               placeholder={`please enter description here (at least 5 characters)..`} 
-              label='Description'/>    
+              label='Description'
+              errorText="Please enter a valid description (at least 5 characters)."
+              />    
       <Input id="address" 
               element="input"
               onInput={inputHandler} //<<== point to be noted.
               validators={[VALIDATOR_REQUIRE()]} 
               placeholder={`please enter address here..`} 
-              label='Address'/>    
+              label='Address'
+              errorText="Please enter a valid address."
+              />    
        
-      <Button disabled={!formState.isValid}>Submit</Button>                   
+      <Button disabled={!formState.isValid}>
+         ADD PLACE
+      </Button>                   
      </form>
 }
 export default NewPlace

@@ -17,6 +17,7 @@ const UserPlaces = (props)=>{
      ,location:{lat:48.8606111, lng:2.337644}
    }
   ]; 
+   const PLACES1 =[];
   console.log('params :',useParams())
    const userId = useParams().userId;
    return  <div> 
